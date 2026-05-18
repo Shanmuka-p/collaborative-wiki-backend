@@ -36,6 +36,10 @@ A production-ready collaborative wiki engine backend using Node.js, Express, and
 This is the easiest way to get the project up and running as it automatically provisions the MongoDB database and the API container.
 
 1.  **Clone the repository.**
+    ```bash
+    git clone https://github.com/Shanmuka-p/collaborative-wiki-backend.git
+    cd collaborative-wiki-backend.git
+    ```
 2.  **Copy the environment file:**
     ```bash
     cp .env.example .env
