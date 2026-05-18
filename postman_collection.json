@@ -1,0 +1,167 @@
+{
+    "info": {
+        "_postman_id": "a1b2c3d4-e5f6-7890-1234-56789abcdef0",
+        "name": "Collaborative Wiki API",
+        "description": "API endpoints for the Collaborative Document Store backend, featuring CRUD operations, Optimistic Concurrency Control, Full-Text Search, and Analytics.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. Create a New Document",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"title\": \"Advanced Postman Testing Guide\",\n  \"content\": \"This document explains how to test API endpoints effectively. It covers mongodb integration and api-design.\",\n  \"tags\": [\"guide\", \"testing\", \"api-design\"],\n  \"authorName\": \"Test User\",\n  \"authorEmail\": \"tester@example.com\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/documents",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "documents"
+                    ]
+                },
+                "description": "Creates a new wiki page. The server will auto-generate the unique `slug` and initialize the version to 1."
+            },
+            "response": []
+        },
+        {
+            "name": "2. Retrieve a Document",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/documents/test-document-5",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "documents",
+                        "test-document-5"
+                    ]
+                },
+                "description": "Fetches a single document by its slug. If the document has a legacy schema, the API will perform a lazy migration and return the modernized schema."
+            },
+            "response": []
+        },
+        {
+            "name": "3. Update Document (OCC Validation)",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"title\": \"Updated Test Document Title\",\n  \"content\": \"We have updated the content of this page using Optimistic Concurrency Control.\",\n  \"version\": 1\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/documents/test-document-5",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "documents",
+                        "test-document-5"
+                    ]
+                },
+                "description": "Updates a document. **Crucial:** You must send the current `version` number. If the version in the database is higher than what you send, the API will reject the update with a 409 Conflict."
+            },
+            "response": []
+        },
+        {
+            "name": "4. Search Documents",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/search?q=mongodb&tags=guide",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "search"
+                    ],
+                    "query": [
+                        {
+                            "key": "q",
+                            "value": "mongodb",
+                            "description": "The text to search for within the title and content."
+                        },
+                        {
+                            "key": "tags",
+                            "value": "guide",
+                            "description": "Comma-separated list of tags to filter by. (Optional)"
+                        }
+                    ]
+                },
+                "description": "Performs a full-text search across all documents, returning them sorted by relevance score. Optionally filters by exact tag matches."
+            },
+            "response": []
+        },
+        {
+            "name": "5. Analytics: Most Edited",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/analytics/most-edited",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "analytics",
+                        "most-edited"
+                    ]
+                },
+                "description": "Returns the top 10 documents that have the highest number of revisions."
+            },
+            "response": []
+        },
+        {
+            "name": "6. Analytics: Tag Co-occurrence",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/analytics/tag-cooccurrence",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "analytics",
+                        "tag-cooccurrence"
+                    ]
+                },
+                "description": "Analyzes the database to find which pairs of tags are most frequently used together on the same documents."
+            },
+            "response": []
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3000",
+            "type": "string"
+        }
+    ]
+}
