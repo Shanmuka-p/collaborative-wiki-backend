@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    environment:
+      - PORT=${PORT:-3000}
+      - MONGO_URI=mongodb://mongo:27017
+      - DATABASE_NAME=${DATABASE_NAME:-wiki_db}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+
+  mongo:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mongo_data:

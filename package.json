@@ -1,0 +1,16 @@
+{
+    "name": "collaborative-wiki-backend",
+    "version": "1.0.0",
+    "description": "Production-ready collaborative wiki engine using MongoDB",
+    "main": "src/index.js",
+    "type": "module",
+    "scripts": {
+        "start": "node src/index.js",
+        "dev": "node src/index.js"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "mongodb": "^6.5.0"
+    }
+}
